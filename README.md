@@ -29,6 +29,8 @@ The external HTTP interface of the API has a basic spec:
 
 If you are running at home or on your own personal dev machine you technically don't have to use the remote development machine and could instead choose to setup the dev environment on your own machine. This workshop encourages the use of a remote dev machine to avoid variations in personal devices when giving the workshop to many attendees, and additionally to move the burden of package downloads and container uploads onto an AWS internet connection instead of the local wifi connection at the workshop venue. Please follow steps to [create a remote development machine](1%20-%20Development%20Environment/).
 
+You can follow steps mentioned [here][./SETUP_DEV_MACHINE.md] to setup a dev machine.
+
 # Sample insurance application deployed on AWS using Elastic Container Service
 
 ![ecs architecture](images/ecs-architecture.png)
@@ -98,11 +100,11 @@ You should see Login Succeeded
 First build each service's container image:
 
 ```bash
-docker build -t approve services/approve/.
-docker build -t find services/find/.
-docker build -t flag services/flag/.
-docker build -t reject services/reject/.
-docker build -t submit services/submit/.
+docker build -t approve src/services/approve/.
+docker build -t find src/services/find/.
+docker build -t flag src/services/flag/.
+docker build -t reject src/services/reject/.
+docker build -t submit src/services/submit/.
 ```
 
 Run `docker images` and verify that you see following two container images:
@@ -282,5 +284,3 @@ Note that you must delete the backend stacks `nodejs-service-approve`, `nodejs-s
 Finally go to the [repositories tab on the ECS dashboard](https://us-west-2.console.aws.amazon.com/ecs/home?region=us-west-2#/repositories), and select the docker repositories you created, and click "Delete Repository"
 
 ![cloudformation outputs](images/delete-repository.png)
-
-Last but not least if you are done with this workshop don't forget to also delete the cloudformation stack "nodejs-dev-machine", to destroy the development machine you used throughout this workshop.

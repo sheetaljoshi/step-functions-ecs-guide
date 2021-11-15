@@ -1,0 +1,160 @@
+---
+AWSTemplateFormatVersion: 2010-09-09
+Description: Bootstrap development environment
+Mappings:
+  ECSAmi:
+    ap-northeast-1:
+      AMI: ami-72f36a14
+    ap-northeast-2:
+      AMI: ami-59b71737
+    ap-southeast-1:
+      AMI: ami-e782f29b
+    ap-southeast-2:
+      AMI: ami-7aa15c18
+    ap-south-1:
+      AMI: ami-f4db8f9b
+    ca-central-1:
+      AMI: ami-9afc79fe
+    sa-east-1:
+      AMI: ami-49256725
+    eu-central-1:
+      AMI: ami-eacf5d85
+    eu-west-1:
+      AMI: ami-acb020d5
+    eu-west-2:
+      AMI: ami-4d809829
+    eu-west-3:
+      AMI: ami-5e02b523
+    us-east-1:
+      AMI: ami-ba722dc0
+    us-east-2:
+      AMI: ami-13af8476
+    us-west-1:
+      AMI: ami-9df0f0fd
+    us-west-2:
+      AMI: ami-c9c87cb1
+  SubnetConfig:
+    VPC:
+      CIDR: '10.0.0.0/16'
+    PublicOne:
+      CIDR: '10.0.0.0/24'
+Parameters:
+  KeyName:
+    Description: Name of an existing EC2 KeyPair to enable SSH access to the EC2 instances
+    Type: AWS::EC2::KeyPair::KeyName
+    MinLength: 1
+Resources:
+  # Create VPC and a public subnet for the development machine
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      CidrBlock: !FindInMap ['SubnetConfig', 'VPC', 'CIDR']
+  PublicSubnetOne:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone:
+         Fn::Select:
+         - 0
+         - Fn::GetAZs: {Ref: 'AWS::Region'}
+      VpcId: !Ref 'VPC'
+      CidrBlock: !FindInMap ['SubnetConfig', 'PublicOne', 'CIDR']
+      MapPublicIpOnLaunch: true
+
+  # Setup an internet gateway and a routing table so that instances
+  # in the public subnet can access the internet using the gateway.
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+  GatewayAttachement:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref 'VPC'
+      InternetGatewayId: !Ref 'InternetGateway'
+  PublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref 'VPC'
+  PublicRoute:
+    Type: AWS::EC2::Route
+    DependsOn: GatewayAttachement
+    Properties:
+      RouteTableId: !Ref 'PublicRouteTable'
+      DestinationCidrBlock: '0.0.0.0/0'
+      GatewayId: !Ref 'InternetGateway'
+  PublicSubnetOneRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref PublicSubnetOne
+      RouteTableId: !Ref PublicRouteTable
+
+  # Create a security group for the development machine that allows SSH access
+  DevelopmentSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Access to the development machine
+      VpcId: !Ref 'VPC'
+  DevelopmentSecurityGroupIngress:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      GroupId: !Ref 'DevelopmentSecurityGroup'
+      IpProtocol: tcp
+      FromPort: 22
+      ToPort: 22
+      CidrIp: 0.0.0.0/0
+
+  # Create instance profile that allows the developer
+  # machine to act as an account root.
+  RootRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service:
+                - "ec2.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      Path: /
+      Policies:
+        - PolicyName: "root"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action: "*"
+                Resource: "*"
+  RootInstanceProfile:
+    Type: "AWS::IAM::InstanceProfile"
+    Properties:
+      Path: "/"
+      Roles:
+        - !Ref "RootRole"
+
+  # Create a development machine in the public subnet.
+  DevelopmentMachine:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId:
+        Fn::FindInMap:
+          - ECSAmi
+          - Ref: AWS::Region
+          - AMI
+      InstanceType: t2.micro
+      IamInstanceProfile: !Ref RootInstanceProfile
+      KeyName: !Ref KeyName
+      NetworkInterfaces:
+        - AssociatePublicIpAddress: true
+          DeviceIndex: 0
+          GroupSet:
+            - !Ref DevelopmentSecurityGroup
+          SubnetId: !Ref PublicSubnetOne
+      UserData:
+         Fn::Base64: |
+          #!/bin/bash -x
+          yum update -y
+Outputs:
+  IPAddress:
+    Description: The IP address of your remote development machine
+    Value: !GetAtt ['DevelopmentMachine', 'PublicIp']
