@@ -62,11 +62,11 @@ cd step-functions-ecs-guide
 ## 2. Create a container registry for each service
 
 ```bash
-aws ecr create-repository --repository-name approve --region us-west-2
-aws ecr create-repository --repository-name find --region us-west-2
-aws ecr create-repository --repository-name flag --region us-west-2
-aws ecr create-repository --repository-name reject --region us-west-2
-aws ecr create-repository --repository-name submit --region us-west-2
+aws ecr create-repository --repository-name insurance-app/approve --region us-west-2
+aws ecr create-repository --repository-name insurance-app/find --region us-west-2
+aws ecr create-repository --repository-name insurance-app/flag --region us-west-2
+aws ecr create-repository --repository-name insurance-app/reject --region us-west-2
+aws ecr create-repository --repository-name insurance-app/submit --region us-west-2
 ```
 
 You will get output similar to this:
@@ -98,11 +98,11 @@ You should see Login Succeeded
 First build each service's container image:
 
 ```bash
-docker build -t approve src/approve/.
-docker build -t find src/find/.
-docker build -t flag src/flag/.
-docker build -t reject src/reject/.
-docker build -t submit src/submit/.
+docker build -t insurance-app/approve src/approve/.
+docker build -t insurance-app/find src/find/.
+docker build -t insurance-app/flag src/flag/.
+docker build -t insurance-app/reject src/reject/.
+docker build -t insurance-app/submit src/submit/.
 ```
 
 Run `docker images` and verify that you see following two container images:
@@ -119,21 +119,21 @@ submit                 latest              ef276a9ad40a        28 seconds ago   
 Then tag the container images and push them to the repository:
 
 ```bash
-docker tag approve:latest [your characters repo URI]:v1
-docker tag find:latest [your locations repo URI]:v1
-docker tag flag:latest [your characters repo URI]:v1
-docker tag reject:latest [your locations repo URI]:v1
-docker tag submit:latest [your characters repo URI]:v1
+docker tag insurance-app/approve:latest [your characters repo URI]:v1
+docker tag insurance-app/find:latest [your locations repo URI]:v1
+docker tag insurance-app/flag:latest [your characters repo URI]:v1
+docker tag insurance-app/reject:latest [your locations repo URI]:v1
+docker tag insurance-app/submit:latest [your characters repo URI]:v1
 ```
 
 Example:
 
 ```bash
-docker tag approve:latest 209640446841.dkr.ecr.us-west-2.amazonaws.com/approve:v1
-docker tag find:latest 209640446841.dkr.ecr.us-west-2.amazonaws.com/find:v1
-docker tag flag:latest 209640446841.dkr.ecr.us-west-2.amazonaws.com/flag:v1
-docker tag reject:latest 209640446841.dkr.ecr.us-west-2.amazonaws.com/reject:v1
-docker tag submit:latest 209640446841.dkr.ecr.us-west-2.amazonaws.com/submit:v1
+docker tag insurance-app/approve:latest 209640446841.dkr.ecr.us-west-2.amazonaws.com/insurance-app/approve:v1
+docker tag insurance-app/find:latest 209640446841.dkr.ecr.us-west-2.amazonaws.com/insurance-app/find:v1
+docker tag insurance-app/flag:latest 209640446841.dkr.ecr.us-west-2.amazonaws.com/insurance-app/flag:v1
+docker tag insurance-app/reject:latest 209640446841.dkr.ecr.us-west-2.amazonaws.com/insurance-app/reject:v1
+docker tag insurance-app/submit:latest 209640446841.dkr.ecr.us-west-2.amazonaws.com/insurance-app/submit:v1
 ```
 
 Finally push the tagged images:
@@ -149,11 +149,11 @@ docker push [your characters repo URI]:v1
 Example:
 
 ```bash
-docker push 209640446841.dkr.ecr.us-west-2.amazonaws.com/approve:v1
-docker push 209640446841.dkr.ecr.us-west-2.amazonaws.com/find:v1
-docker push 209640446841.dkr.ecr.us-west-2.amazonaws.com/flag:v1
-docker push 209640446841.dkr.ecr.us-west-2.amazonaws.com/reject:v1
-docker push 209640446841.dkr.ecr.us-west-2.amazonaws.com/submit:v1
+docker push 209640446841.dkr.ecr.us-west-2.amazonaws.com/insurance-app/approve:v1
+docker push 209640446841.dkr.ecr.us-west-2.amazonaws.com/insurance-app/find:v1
+docker push 209640446841.dkr.ecr.us-west-2.amazonaws.com/insurance-app/flag:v1
+docker push 209640446841.dkr.ecr.us-west-2.amazonaws.com/insurance-app/reject:v1
+docker push 209640446841.dkr.ecr.us-west-2.amazonaws.com/insurance-app/submit:v1
 ```
 
 ## 3. Launch a cluster
@@ -172,7 +172,7 @@ Waiting for stack create/update to complete
 Successfully created/updated stack - cluster
 ```
 
-This may take a few minutes, while it creates a new private networking stack, and launches a small cluster of two t2.micro instances on your account. To view the list of resources that is being created [check the cloudformation stack itself](code/deploy/cluster.yml).
+This may take a few minutes, while it creates a new private networking stack, and launches a small cluster of two t2.micro instances on your account. To view the list of resources that is being created [check the cloudformation stack itself](deploy/cluster.yml).
 
 Once the deployment completes you should open [the CloudFormation dashboard](https://us-west-2.console.aws.amazon.com/cloudformation/home?region=us-west-2#/stacks?filter=active) to check the outputs of your newly created CloudFormation stack, as well as [the Elastic Container Service dashboard](https://us-west-2.console.aws.amazon.com/ecs/home?region=us-west-2#/clusters) where you can see your new cluster.
 
@@ -180,7 +180,7 @@ You should select the cluster stack and view the "Outputs" tab, as the next step
 
 ## 4. Launch your containers as services
 
-To launch the docker containers that we created we will use another CloudFormation stack that automatically creates all the resources necessary to have an autoscaling service in an ECS cluster. Once again I recommend [checking out the stack itself](code/deploy/service.yml) to understand more about the resources that this stack creates on your account.
+To launch the docker containers that we created we will use another CloudFormation stack that automatically creates all the resources necessary to have an autoscaling service in an ECS cluster. Once again I recommend [checking out the stack itself](deploy/service.yml) to understand more about the resources that this stack creates on your account.
 
 Run the following commands, substituting in your own repository URI from step #2 and your own `ListenerArn` from the outputs of the CloudFormation stack run in step #3.
 
