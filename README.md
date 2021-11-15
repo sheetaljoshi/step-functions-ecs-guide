@@ -37,7 +37,7 @@ In this workshop we will deploy different microservices as containers running in
 
 ## 1. Connect to your development machine
 
-If you have not done so already create [a development machine on AWS](../1%20-%20Development%20Environment) to do this
+If you have not done so already create [a development machine on AWS](./SETUP_DEV_MACHINE.md) to do this
 workshop.
 
 If you don't already have an SSH session open, SSH to your development machine.
