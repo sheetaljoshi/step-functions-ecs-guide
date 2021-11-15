@@ -59,7 +59,13 @@ Then change your current working directory to the project directory:
 cd step-functions-ecs-guide
 ```
 
-## 2. Create a container registry for each service
+## 2. Setup environment variables
+```bash
+export AWS_REGION=us-west-2
+export AWS_ACCOUNT_ID=<AWS_ACCOUNT_ID>
+```
+
+## 3. Create a container registry for each service
 
 ```bash
 aws ecr create-repository --repository-name insurance-app/approve --region us-west-2
@@ -93,7 +99,7 @@ Now authenticate with your repository so you have permission to push to it:
 
 You should see Login Succeeded
 
-## 3. Build and Push
+## 4. Build and Push
 
 First build each service's container image:
 
@@ -156,7 +162,7 @@ docker push 209640446841.dkr.ecr.us-west-2.amazonaws.com/insurance-app/reject:v1
 docker push 209640446841.dkr.ecr.us-west-2.amazonaws.com/insurance-app/submit:v1
 ```
 
-## 3. Launch a cluster
+## 5. Launch a cluster
 
 Use the following command to launch an ECS cluster on your account:
 
@@ -178,7 +184,7 @@ Once the deployment completes you should open [the CloudFormation dashboard](htt
 
 You should select the cluster stack and view the "Outputs" tab, as the next step will require a value from the outputs of this stack.
 
-## 4. Launch your containers as services
+## 6. Launch your containers as services
 
 To launch the docker containers that we created we will use another CloudFormation stack that automatically creates all the resources necessary to have an autoscaling service in an ECS cluster. Once again I recommend [checking out the stack itself](deploy/service.yml) to understand more about the resources that this stack creates on your account.
 
@@ -243,7 +249,7 @@ aws cloudformation deploy \
                         Priority=1                       
 ```
 
-## 5. Test your new services
+## 6. Test your new services
 
 Verify that the services are operating by using the URL that is in the outputs of the cluster's CloudFormation stack:
 
@@ -255,7 +261,7 @@ You can fetch a URL from the service API using your browser or curl. For example
 curl http://empir-publi-8p1lmmeypqd3-1841449678.us-west-2.elb.amazonaws.com/api/characters/by-species/human
 ```
 
-## 6. Tour the Elastic Container Service dashboard
+## 7. Tour the Elastic Container Service dashboard
 
 If you view the AWS console for ECS you will see an overview of your cluster:
 
@@ -271,7 +277,7 @@ And your tasks:
 
 From this dashboard you can modify a service to increase the number of tasks that it is running, or you can shutdown tasks, instances, or even entire services.
 
-## 7. Shutdown & Cleanup
+## 8. Shutdown & Cleanup
 
 Go to the [CloudFormation dashboard on your account](https://us-west-2.console.aws.amazon.com/cloudformation/home?region=us-west-2#/stacks?filter=active) and delete the stacks by selecting them, clicking the "Actions" menu and then clicking "Delete Stack"
 
