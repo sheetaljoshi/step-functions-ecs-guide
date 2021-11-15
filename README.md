@@ -61,18 +61,18 @@ cd step-functions-ecs-guide
 
 ## 2. Setup environment variables
 ```bash
-export AWS_REGION=us-west-2
+export AWS_REGION=$AWS_REGION
 export AWS_ACCOUNT_ID=<AWS_ACCOUNT_ID>
 ```
 
 ## 3. Create a container registry for each service
 
 ```bash
-aws ecr create-repository --repository-name insurance-app/approve --region us-west-2
-aws ecr create-repository --repository-name insurance-app/find --region us-west-2
-aws ecr create-repository --repository-name insurance-app/flag --region us-west-2
-aws ecr create-repository --repository-name insurance-app/reject --region us-west-2
-aws ecr create-repository --repository-name insurance-app/submit --region us-west-2
+aws ecr create-repository --repository-name insurance-app/approve --region $AWS_REGION
+aws ecr create-repository --repository-name insurance-app/find --region $AWS_REGION
+aws ecr create-repository --repository-name insurance-app/flag --region $AWS_REGION
+aws ecr create-repository --repository-name insurance-app/reject --region $AWS_REGION
+aws ecr create-repository --repository-name insurance-app/submit --region $AWS_REGION
 ```
 
 You will get output similar to this:
@@ -82,9 +82,9 @@ You will get output similar to this:
     "repository": {
         "registryId": "[your account ID]",
         "repositoryName": "approve",
-        "repositoryArn": "arn:aws:ecr:us-west-2:[your account ID]:repository/approve",
+        "repositoryArn": "arn:aws:ecr:$AWS_REGION:[your account ID]:repository/approve",
         "createdAt": 1507564672.0,
-        "repositoryUri": "[your account ID].dkr.ecr.us-west-2.amazonaws.com/approve"
+        "repositoryUri": "[your account ID].dkr.ecr.$AWS_REGION.amazonaws.com/approve"
     }
 }
 ```
@@ -93,9 +93,7 @@ Take note of the `repositoryUri` value in each response, as you will need to use
 
 Now authenticate with your repository so you have permission to push to it:
 
-- Run `aws ecr get-login --no-include-email --region us-west-2`
-- You are going to get a massive output starting with `docker login -u AWS -p ...`
-- Copy this entire output, paste, and run it in the terminal.
+- Run `aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.$AWS_REGION.region.amazonaws.com`
 
 You should see Login Succeeded
 
@@ -135,11 +133,11 @@ docker tag insurance-app/submit:latest [your characters repo URI]:v1
 Example:
 
 ```bash
-docker tag insurance-app/approve:latest 209640446841.dkr.ecr.us-west-2.amazonaws.com/insurance-app/approve:v1
-docker tag insurance-app/find:latest 209640446841.dkr.ecr.us-west-2.amazonaws.com/insurance-app/find:v1
-docker tag insurance-app/flag:latest 209640446841.dkr.ecr.us-west-2.amazonaws.com/insurance-app/flag:v1
-docker tag insurance-app/reject:latest 209640446841.dkr.ecr.us-west-2.amazonaws.com/insurance-app/reject:v1
-docker tag insurance-app/submit:latest 209640446841.dkr.ecr.us-west-2.amazonaws.com/insurance-app/submit:v1
+docker tag insurance-app/approve:latest 209640446841.dkr.ecr.$AWS_REGION.amazonaws.com/insurance-app/approve:v1
+docker tag insurance-app/find:latest 209640446841.dkr.ecr.$AWS_REGION.amazonaws.com/insurance-app/find:v1
+docker tag insurance-app/flag:latest 209640446841.dkr.ecr.$AWS_REGION.amazonaws.com/insurance-app/flag:v1
+docker tag insurance-app/reject:latest 209640446841.dkr.ecr.$AWS_REGION.amazonaws.com/insurance-app/reject:v1
+docker tag insurance-app/submit:latest 209640446841.dkr.ecr.$AWS_REGION.amazonaws.com/insurance-app/submit:v1
 ```
 
 Finally push the tagged images:
@@ -155,11 +153,11 @@ docker push [your characters repo URI]:v1
 Example:
 
 ```bash
-docker push 209640446841.dkr.ecr.us-west-2.amazonaws.com/insurance-app/approve:v1
-docker push 209640446841.dkr.ecr.us-west-2.amazonaws.com/insurance-app/find:v1
-docker push 209640446841.dkr.ecr.us-west-2.amazonaws.com/insurance-app/flag:v1
-docker push 209640446841.dkr.ecr.us-west-2.amazonaws.com/insurance-app/reject:v1
-docker push 209640446841.dkr.ecr.us-west-2.amazonaws.com/insurance-app/submit:v1
+docker push 209640446841.dkr.ecr.$AWS_REGION.amazonaws.com/insurance-app/approve:v1
+docker push 209640446841.dkr.ecr.$AWS_REGION.amazonaws.com/insurance-app/find:v1
+docker push 209640446841.dkr.ecr.$AWS_REGION.amazonaws.com/insurance-app/flag:v1
+docker push 209640446841.dkr.ecr.$AWS_REGION.amazonaws.com/insurance-app/reject:v1
+docker push 209640446841.dkr.ecr.$AWS_REGION.amazonaws.com/insurance-app/submit:v1
 ```
 
 ## 5. Launch a cluster
@@ -167,7 +165,7 @@ docker push 209640446841.dkr.ecr.us-west-2.amazonaws.com/insurance-app/submit:v1
 Use the following command to launch an ECS cluster on your account:
 
 ```bash
-aws cloudformation deploy --stack-name nodejs --template-file deploy/cluster.yml --region us-west-2 --capabilities CAPABILITY_IAM
+aws cloudformation deploy --stack-name nodejs --template-file deploy/cluster.yml --region $AWS_REGION --capabilities CAPABILITY_IAM
 ```
 
 You will see output similar to this:
@@ -180,7 +178,7 @@ Successfully created/updated stack - cluster
 
 This may take a few minutes, while it creates a new private networking stack, and launches a small cluster of two t2.micro instances on your account. To view the list of resources that is being created [check the cloudformation stack itself](deploy/cluster.yml).
 
-Once the deployment completes you should open [the CloudFormation dashboard](https://us-west-2.console.aws.amazon.com/cloudformation/home?region=us-west-2#/stacks?filter=active) to check the outputs of your newly created CloudFormation stack, as well as [the Elastic Container Service dashboard](https://us-west-2.console.aws.amazon.com/ecs/home?region=us-west-2#/clusters) where you can see your new cluster.
+Once the deployment completes you should open [the CloudFormation dashboard](https://$AWS_REGION.console.aws.amazon.com/cloudformation/home?region=$AWS_REGION#/stacks?filter=active) to check the outputs of your newly created CloudFormation stack, as well as [the Elastic Container Service dashboard](https://$AWS_REGION.console.aws.amazon.com/ecs/home?region=$AWS_REGION#/clusters) where you can see your new cluster.
 
 You should select the cluster stack and view the "Outputs" tab, as the next step will require a value from the outputs of this stack.
 
@@ -196,7 +194,7 @@ Run the following commands, substituting in your own repository URI from step #2
 aws cloudformation deploy \
   --stack-name nodejs-service-appove \
   --template-file deploy/service.yml \
-  --region us-west-2 \
+  --region $AWS_REGION \
   --parameter-overrides StackName=nodejs \
                         ServiceName=approve \
                         ListenerArn=<the listener arn from your cluster stack outputs>
@@ -207,7 +205,7 @@ aws cloudformation deploy \
 aws cloudformation deploy \
   --stack-name nodejs-service-find \
   --template-file deploy/service.yml \
-  --region us-west-2 \
+  --region $AWS_REGION \
   --parameter-overrides StackName=nodejs \
                         ServiceName=find \
                         ListenerArn=<the listener arn from your cluster stack outputs>
@@ -218,7 +216,7 @@ aws cloudformation deploy \
 aws cloudformation deploy \
   --stack-name nodejs-service-flag \
   --template-file deploy/flag.yml \
-  --region us-west-2 \
+  --region $AWS_REGION \
   --parameter-overrides StackName=nodejs \
                         ServiceName=flag \
                         ListenerArn=<the listener arn from your cluster stack outputs>
@@ -229,7 +227,7 @@ aws cloudformation deploy \
 aws cloudformation deploy \
   --stack-name nodejs-service-reject \
   --template-file deploy/service.yml \
-  --region us-west-2 \
+  --region $AWS_REGION \
   --parameter-overrides StackName=nodejs \
                         ServiceName=reject \
                         ListenerArn=<the listener arn from your cluster stack outputs>
@@ -240,7 +238,7 @@ aws cloudformation deploy \
 aws cloudformation deploy \
   --stack-name nodejs-service-submit \
   --template-file deploy/service.yml \
-  --region us-west-2 \
+  --region $AWS_REGION \
   --parameter-overrides StackName=nodejs \
                         ServiceName=submit \
                         ListenerArn=<the listener arn from your cluster stack outputs>
@@ -258,7 +256,7 @@ Verify that the services are operating by using the URL that is in the outputs o
 You can fetch a URL from the service API using your browser or curl. For example:
 
 ```bash
-curl http://empir-publi-8p1lmmeypqd3-1841449678.us-west-2.elb.amazonaws.com/api/characters/by-species/human
+curl http://empir-publi-8p1lmmeypqd3-1841449678.$AWS_REGION.elb.amazonaws.com/api/characters/by-species/human
 ```
 
 ## 7. Tour the Elastic Container Service dashboard
@@ -279,12 +277,12 @@ From this dashboard you can modify a service to increase the number of tasks tha
 
 ## 8. Shutdown & Cleanup
 
-Go to the [CloudFormation dashboard on your account](https://us-west-2.console.aws.amazon.com/cloudformation/home?region=us-west-2#/stacks?filter=active) and delete the stacks by selecting them, clicking the "Actions" menu and then clicking "Delete Stack"
+Go to the [CloudFormation dashboard on your account](https://$AWS_REGION.console.aws.amazon.com/cloudformation/home?region=$AWS_REGION#/stacks?filter=active) and delete the stacks by selecting them, clicking the "Actions" menu and then clicking "Delete Stack"
 
 ![cloudformation outputs](images/delete-stack.png)
 
 Note that you must delete the backend stacks `nodejs-service-approve`, `nodejs-service-find`, `nodejs-service-flag`, `nodejs-service-reject` and `nodejs-service-submit` first. Then you can delete the `nodejs` stack, because there is a dependency between the cluster and the services that prevents the cluster from being deleted until all services have been deleted first.
 
-Finally go to the [repositories tab on the ECS dashboard](https://us-west-2.console.aws.amazon.com/ecs/home?region=us-west-2#/repositories), and select the docker repositories you created, and click "Delete Repository"
+Finally go to the [repositories tab on the ECS dashboard](https://$AWS_REGION.console.aws.amazon.com/ecs/home?region=$AWS_REGION#/repositories), and select the docker repositories you created, and click "Delete Repository"
 
 ![cloudformation outputs](images/delete-repository.png)
