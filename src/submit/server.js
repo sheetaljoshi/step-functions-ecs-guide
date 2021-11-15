@@ -10,7 +10,7 @@ app.use(function *(next) {
   console.log('%s %s - %s', this.method, this.url, ms);
 });
 
-router.get('/api/approve/:id', function *() {
+router.get('/api/submit/:id', function *() {
   const id = parseInt(this.params.id, 10);
   this.body = db.applications.find((applications) => applications.id === id);
 });

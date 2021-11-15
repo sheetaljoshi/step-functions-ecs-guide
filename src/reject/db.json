@@ -1,5 +1,5 @@
 {
-  "characters": [
+  "applications": [
     {
       "id": 1,
       "name": "Marceline Abadeer",
@@ -13,7 +13,7 @@
         "queen"
       ],
       "location": 1,
-      "status": "Approved"
+      "status": "Rejected"
     },
     {
       "id": 2,
@@ -27,7 +27,7 @@
         "hero"
       ],
       "location": 2,
-      "status": "Not Approved"
+      "status": "Approved"
     },
     {
       "id": 3,
@@ -41,7 +41,7 @@
         "scientist"
       ],
       "location": 3,
-      "status": "Approved"
+      "status": "Rejected"
     },
     {
       "id": 4,
@@ -58,7 +58,7 @@
         "father"
       ],
       "location": 2,
-      "status": "Not Approved"
+      "status": "Approved"
     },
     {
       "id": 5,
@@ -74,7 +74,7 @@
         "adventurer"
       ],
       "location": 2,
-      "status": "Approved"
+      "status": "Rejected"
     }
   ]
 }
