@@ -98,11 +98,11 @@ You should see Login Succeeded
 First build each service's container image:
 
 ```bash
-docker build -t characters services/approve/.
-docker build -t locations services/find/.
-docker build -t characters services/flag/.
-docker build -t locations services/reject/.
-docker build -t characters services/submit/.
+docker build -t approve services/approve/.
+docker build -t find services/find/.
+docker build -t flag services/flag/.
+docker build -t reject services/reject/.
+docker build -t submit services/submit/.
 ```
 
 Run `docker images` and verify that you see following two container images:
