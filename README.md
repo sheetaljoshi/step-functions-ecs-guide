@@ -27,9 +27,7 @@ The external HTTP interface of the API has a basic spec:
 
 # Create a remote development machine
 
-If you are running at home or on your own personal dev machine you technically don't have to use the remote development machine and could instead choose to setup the dev environment on your own machine. This workshop encourages the use of a remote dev machine to avoid variations in personal devices when giving the workshop to many attendees, and additionally to move the burden of package downloads and container uploads onto an AWS internet connection instead of the local wifi connection at the workshop venue. Please follow steps to [create a remote development machine](1%20-%20Development%20Environment/).
-
-You can follow steps mentioned [here][./SETUP_DEV_MACHINE.md] to setup a dev machine.
+If you are running at home or on your own personal dev machine you technically don't have to use the remote development machine and could instead choose to setup the dev environment on your own machine. This workshop encourages the use of a remote dev machine to avoid variations in personal devices when giving the workshop to many attendees, and additionally to move the burden of package downloads and container uploads onto an AWS internet connection instead of the local wifi connection at the workshop venue. Please follow steps to [create a remote development machine](./SETUP_DEV_MACHINE.md).
 
 # Sample insurance application deployed on AWS using Elastic Container Service
 
