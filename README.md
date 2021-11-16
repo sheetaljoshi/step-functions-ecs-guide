@@ -123,41 +123,11 @@ submit                 latest              ef276a9ad40a        28 seconds ago   
 Then tag the container images and push them to the repository:
 
 ```bash
-docker tag insurance-app/approve:latest [your characters repo URI]:v1
-docker tag insurance-app/find:latest [your locations repo URI]:v1
-docker tag insurance-app/flag:latest [your characters repo URI]:v1
-docker tag insurance-app/reject:latest [your locations repo URI]:v1
-docker tag insurance-app/submit:latest [your characters repo URI]:v1
-```
-
-Example:
-
-```bash
-docker tag insurance-app/approve:latest 209640446841.dkr.ecr.$AWS_REGION.amazonaws.com/insurance-app/approve:v1
-docker tag insurance-app/find:latest 209640446841.dkr.ecr.$AWS_REGION.amazonaws.com/insurance-app/find:v1
-docker tag insurance-app/flag:latest 209640446841.dkr.ecr.$AWS_REGION.amazonaws.com/insurance-app/flag:v1
-docker tag insurance-app/reject:latest 209640446841.dkr.ecr.$AWS_REGION.amazonaws.com/insurance-app/reject:v1
-docker tag insurance-app/submit:latest 209640446841.dkr.ecr.$AWS_REGION.amazonaws.com/insurance-app/submit:v1
-```
-
-Finally push the tagged images:
-
-```bash
-docker push [your characters repo URI]:v1
-docker push [your locations repo URI]:v1
-docker push [your characters repo URI]:v1
-docker push [your locations repo URI]:v1
-docker push [your characters repo URI]:v1
-```
-
-Example:
-
-```bash
-docker push 209640446841.dkr.ecr.$AWS_REGION.amazonaws.com/insurance-app/approve:v1
-docker push 209640446841.dkr.ecr.$AWS_REGION.amazonaws.com/insurance-app/find:v1
-docker push 209640446841.dkr.ecr.$AWS_REGION.amazonaws.com/insurance-app/flag:v1
-docker push 209640446841.dkr.ecr.$AWS_REGION.amazonaws.com/insurance-app/reject:v1
-docker push 209640446841.dkr.ecr.$AWS_REGION.amazonaws.com/insurance-app/submit:v1
+docker tag insurance-app/approve:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/insurance-app/approve:v1
+docker tag insurance-app/find:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/insurance-app/find:v1
+docker tag insurance-app/flag:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/insurance-app/flag:v1
+docker tag insurance-app/reject:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/insurance-app/reject:v1
+docker tag insurance-app/submit:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/insurance-app/submit:v1
 ```
 
 ## 5. Launch a cluster
