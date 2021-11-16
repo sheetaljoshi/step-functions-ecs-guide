@@ -358,7 +358,7 @@ Resources:
       HealthCheckProtocol: HTTP
       HealthCheckTimeoutSeconds: 5
       HealthyThresholdCount: 2
-      Name: !Join ['-', [!Ref 'AWS::StackName', 'drop-traffic-public']]
+      Name: !Join ['-', [!Ref 'AWS::StackName', 'lb']]
       Port: 80
       Protocol: HTTP
       UnhealthyThresholdCount: 2
