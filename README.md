@@ -130,6 +130,16 @@ docker tag insurance-app/reject:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazo
 docker tag insurance-app/submit:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/insurance-app/submit:v1
 ```
 
+Finally push the tagged images:
+
+```bash
+docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/insurance-app/approve:v1
+docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/insurance-app/find:v1
+docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/insurance-app/flag:v1
+docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/insurance-app/reject:v1
+docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/insurance-app/submit:v1
+```
+
 ## 5. Launch a cluster
 
 Use the following command to launch an ECS cluster on your account:
