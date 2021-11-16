@@ -145,7 +145,7 @@ docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/insurance-app/subm
 Use the following command to launch an ECS cluster on your account:
 
 ```bash
-aws cloudformation deploy --stack-name nodejs --template-file deploy/cluster.yml --region $AWS_REGION --capabilities CAPABILITY_IAM
+aws cloudformation deploy --stack-name insurance-app-ecs-cluster --template-file deploy/cluster.yml --region $AWS_REGION --capabilities CAPABILITY_IAM
 ```
 
 You will see output similar to this:
@@ -172,10 +172,10 @@ Run the following commands, substituting in your own repository URI from step #2
 
 ```bash
 aws cloudformation deploy \
-  --stack-name nodejs-service-appove \
+  --stack-name insurance-app-service-appove \
   --template-file deploy/service.yml \
   --region $AWS_REGION \
-  --parameter-overrides StackName=nodejs \
+  --parameter-overrides StackName=insurance-app-ecs-cluster \
                         ServiceName=approve \
                         ListenerArn=<the listener arn from your cluster stack outputs>
                         ImageUrl=<your approve repo URI>:v1 \
@@ -183,10 +183,10 @@ aws cloudformation deploy \
                         Priority=1
 
 aws cloudformation deploy \
-  --stack-name nodejs-service-find \
+  --stack-name insurance-app-service-find \
   --template-file deploy/service.yml \
   --region $AWS_REGION \
-  --parameter-overrides StackName=nodejs \
+  --parameter-overrides StackName=insurance-app-ecs-cluster \
                         ServiceName=find \
                         ListenerArn=<the listener arn from your cluster stack outputs>
                         ImageUrl=<your find repo URI>:v1 \
@@ -194,10 +194,10 @@ aws cloudformation deploy \
                         Priority=2
 
 aws cloudformation deploy \
-  --stack-name nodejs-service-flag \
+  --stack-name insurance-app-service-flag \
   --template-file deploy/flag.yml \
   --region $AWS_REGION \
-  --parameter-overrides StackName=nodejs \
+  --parameter-overrides StackName=insurance-app-ecs-cluster \
                         ServiceName=flag \
                         ListenerArn=<the listener arn from your cluster stack outputs>
                         ImageUrl=<your flag repo URI>:v1 \
@@ -205,10 +205,10 @@ aws cloudformation deploy \
                         Priority=1
 
 aws cloudformation deploy \
-  --stack-name nodejs-service-reject \
+  --stack-name insurance-app-service-reject \
   --template-file deploy/service.yml \
   --region $AWS_REGION \
-  --parameter-overrides StackName=nodejs \
+  --parameter-overrides StackName=insurance-app-ecs-cluster \
                         ServiceName=reject \
                         ListenerArn=<the listener arn from your cluster stack outputs>
                         ImageUrl=<your reject repo URI>:v1 \
@@ -216,10 +216,10 @@ aws cloudformation deploy \
                         Priority=1
 
 aws cloudformation deploy \
-  --stack-name nodejs-service-submit \
+  --stack-name insurance-app-service-submit \
   --template-file deploy/service.yml \
   --region $AWS_REGION \
-  --parameter-overrides StackName=nodejs \
+  --parameter-overrides StackName=insurance-app-ecs-cluster \
                         ServiceName=submit \
                         ListenerArn=<the listener arn from your cluster stack outputs>
                         ImageUrl=<your submit repo URI>:v1 \
@@ -261,7 +261,7 @@ Go to the [CloudFormation dashboard on your account](https://$AWS_REGION.console
 
 ![cloudformation outputs](images/delete-stack.png)
 
-Note that you must delete the backend stacks `nodejs-service-approve`, `nodejs-service-find`, `nodejs-service-flag`, `nodejs-service-reject` and `nodejs-service-submit` first. Then you can delete the `nodejs` stack, because there is a dependency between the cluster and the services that prevents the cluster from being deleted until all services have been deleted first.
+Note that you must delete the backend stacks `insurance-app-service-approve`, `insurance-app-service-find`, `insurance-app-service-flag`, `insurance-app-service-reject` and `insurance-app-service-submit` first. Then you can delete the `insurance-app-ecs-cluster` stack, because there is a dependency between the cluster and the services that prevents the cluster from being deleted until all services have been deleted first.
 
 Finally go to the [repositories tab on the ECS dashboard](https://$AWS_REGION.console.aws.amazon.com/ecs/home?region=$AWS_REGION#/repositories), and select the docker repositories you created, and click "Delete Repository"
 
