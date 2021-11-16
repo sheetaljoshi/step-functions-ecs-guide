@@ -2,7 +2,7 @@ AWSTemplateFormatVersion: '2010-09-09'
 Parameters:
   DesiredCapacity:
     Type: Number
-    Default: '2'
+    Default: '4'
     Description: Number of instances to launch in your ECS cluster.
   MaxSize:
     Type: Number
