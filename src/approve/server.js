@@ -16,7 +16,7 @@ var params = {
 };
 
 if (typeof application !== undefined && application) {
-    	params.output = "\"" + application.id + "\"";
+    	params.output = "\"APPROVED\"";
 	console.log(params);
     	stepfunctions.sendTaskSuccess(params, function(err, data) {
     		if (err) console.log(err, err.stack); // an error occurred
