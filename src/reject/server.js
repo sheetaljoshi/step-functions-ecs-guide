@@ -1,31 +1,13 @@
-const app = require('koa')();
-const router = require('koa-router')();
+var AWS = require('aws-sdk');
 const db = require('./db.json');
+var stepfunctions = new AWS.StepFunctions();
 
-// Log requests
-app.use(function *(next) {
-  const start = new Date;
-  yield next;
-  const ms = new Date - start;
-  console.log('%s %s - %s', this.method, this.url, ms);
-});
+var params = {
+              output: "\"Added to database\"",
+              taskToken: process.env.TASK_TOKEN_ENV_VARIABLE
+};
 
-router.get('/api/reject/:id', function *() {
-  const id = parseInt(this.params.id, 10);
-  this.body = db.applications.find((applications) => applications.id === id);
-});
-
-router.get('/', function *() {
-  this.body = 'Ready to receive requests';
-});
-
-app.use(router.routes());
-app.use(router.allowedMethods());
-
-var server = app.listen(8081);
-
-process.on('SIGTERM', function() {
-  console.log('Shutting down...');
-  server.close();
-});
-
+stepfunctions.sendTaskSuccess(params, function(err, data) {
+    		if (err) console.log(err, err.stack); // an error occurred
+     		else     console.log(data);           // successful response
+    });

@@ -2,79 +2,58 @@
   "applications": [
     {
       "id": 1,
-      "name": "Marceline Abadeer",
+      "name": "Mary Smith",
       "gender": "female",
-      "species": [
-        "human",
-        "demon",
-        "vampire"
-      ],
-      "occupations": [
-        "queen"
-      ],
-      "location": 1,
-      "status": "Submitted"
+      "address": "6007 Applegate Lane",
+      "city": "Louisville",
+      "state": "KY",
+      "postalCode": "40219",
+      "status": "Approved",
+      "interests": ["home", "auto", "life"]
     },
     {
       "id": 2,
-      "name": "Finn 'the Human' Mertens",
+      "name": "James Johnson",
       "gender": "male",
-      "species": [
-        "human"
-      ],
-      "occupations": [
-        "adventurer",
-        "hero"
-      ],
-      "location": 2,
-      "status": "Initiated"
+      "address": "560 Penstock Drive",
+      "city": "Grass Valley",
+      "state": "CA",
+      "postalCode": "95945",
+      "status": "Not Approved",
+      "interests": ["home", "auto"]
     },
     {
       "id": 3,
-      "name": "Bonnibel Bubblegum",
+      "name": "Jennifer Law",
       "gender": "female",
-      "species": [
-        "candy elemental"
-      ],
-      "occupations": [
-        "princess",
-        "scientist"
-      ],
-      "location": 3,
-      "status": "Submitted"
+      "address": "150 Carter Street",
+      "city": "Manchester",
+      "state": "CT",
+      "postalCode": "06040",
+      "status": "Approved",
+      "interests": ["home", "auto", "life"]
     },
     {
       "id": 4,
-      "name": "Jake the Dog",
+      "name": "David Jacobs",
       "gender": "male",
-      "species": [
-        "dog",
-        "shape-shifter"
-      ],
-      "occupations": [
-        "criminal",
-        "hero",
-        "adventurer",
-        "father"
-      ],
-      "location": 2,
-      "status": "Initiated"
+      "address": "2721 Lindsay Avenue",
+      "city": "Louisville",
+      "state": "KY",
+      "postalCode": "40206",
+      "status": "Not Approved",
+      "interests": ["home"]
     },
     {
       "id": 5,
-      "name": "BMO",
-      "gender": "genderless",
-      "species": [
-        "mo"
-      ],
-      "occupations": [
-        "video game console",
-        "computer",
-        "vcr",
-        "adventurer"
-      ],
-      "location": 2,
-      "status": "Submitted"
+      "name": "Charles Thomson",
+      "address": "18 Densmore Drive",
+      "city": "Essex",
+      "state": "VT",
+      "postalCode": "05452",
+      "gender": "male",
+      "status": "Approved",
+      "interests": ["home", "auto", "life"]
     }
   ]
 }

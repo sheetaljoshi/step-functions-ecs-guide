@@ -2,6 +2,7 @@
   "dependencies": {
     "aws": "^0.0.3-2",
     "aws-sdk": "^2.1032.0",
+    "json-find": "^2.0.8",
     "koa": "^1.2.5",
     "koa-router": "^5.4.0"
   },

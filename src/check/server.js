@@ -2,12 +2,17 @@ var AWS = require('aws-sdk');
 const db = require('./db.json');
 var stepfunctions = new AWS.StepFunctions();
 
-var id = process.env.ID;
+var name = process.env.NAME;
+var address = process.env.ADDRESS;
 
 var application = undefined;
 
-if (typeof id !== undefined && id) {
-	application = db.applications.find((applications) => applications.id === id);
+if (typeof name !== undefined && name) {
+	application = db.applications.find((applications) => applications.name === name);
+}else {
+	if (typeof address !== undefined && address) {
+		application = db.applications.find((applications) => applications.address === address);
+	}
 }
 
 var params = {
@@ -16,7 +21,7 @@ var params = {
 };
 
 if (typeof application !== undefined && application) {
-    	params.output = "\"" + application.id + "\"";
+    	params.output = JSON.stringify(application);
 	console.log(params);
     	stepfunctions.sendTaskSuccess(params, function(err, data) {
     		if (err) console.log(err, err.stack); // an error occurred
