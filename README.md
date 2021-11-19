@@ -1,12 +1,12 @@
-# ACME Insurance Backends on ECS
+# Insurance Backends on ECS
 
 As a developer you are probably already familiar with how to build and run an application on your local machine:
 
-![small localhost](1%20-%20Development%20Environment/images/localhost.png)
+![small localhost](./images/localhost.png)
 
 But the next step is packaging your application up and running it on a server, or even a whole fleet of servers, and managing this can be challenging:
 
-![large deployment](1%20-%20Development%20Environment/images/deployment.png)
+![large deployment](./images/deployment.png)
 
 This guide will help you take the same sample Insurance application from localhost to deployed on ECS.
 
@@ -31,7 +31,7 @@ If you are running at home or on your own personal dev machine you technically d
 
 # Sample insurance application deployed on AWS using Elastic Container Service
 
-![ecs architecture](images/ecs-architecture.png)
+![ecs architecture](./images/insurance-app.png)
 
 In this workshop we will deploy different microservices as containers running in a cluster of EC2 hosts orchestrated by Elastic Container Service. Traffic will reach the containers through an AWS Application Load Balancer which routes traffic to the four different services based on the path of the request.
 
