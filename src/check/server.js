@@ -33,4 +33,3 @@ if (typeof application !== undefined && application) {
         	else     console.log(data);           // successful response
 	});
 }
-
